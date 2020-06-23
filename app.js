@@ -1,6 +1,8 @@
 const http = require('http');
 
 // Callback Server Function
-http.createServer((req, res) => {
-    console.log(req);
+const server = http.createServer((req, res) => {
+    console.log("Request Recieved");
 });
+
+server.listen(3000);
