@@ -1,9 +1,11 @@
 const http = require('http');
+const fs = require('fs');
+const { parse } = require('path');
 
 // Callback Server Function
 const server = http.createServer((req, res) => {
     const url = req.url;
-
+    const method = req.method; 
     if(url === '/'){
         // res.write('<html> <head><title>Store Data</title></head> <body> <form action="/message" method="POST"> Enter the Data: <input type="text" name="" id=""> <button type="submit">Save on server</button></form></body></html>');
         res.write('<html>');
@@ -12,6 +14,22 @@ const server = http.createServer((req, res) => {
         res.write('<button type="submit"> Save on Server</button>');
         res.write('</form></body>');
         res.write('</html>');
+        return res.end();
+    }
+    if (url === '/message' && method === 'POST'){
+        const body = [];
+        req.on('data', (chunk) => {
+            console.log(chunk);
+            body.push(chunk);
+        });
+        req.on('end', (buffer) => {
+            const parsedBody = Buffer.concat(body).toString();
+            console.log(parsedBody);
+            const message = parsedBody.split('=')[1];
+            fs.writeFileSync('Message.txt', message);
+        });
+        res.statusCode = 302;
+        res.setHeader('Location', '/');
         return res.end();
     }
 });
