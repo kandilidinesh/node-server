@@ -2,11 +2,18 @@ const http = require('http');
 
 // Callback Server Function
 const server = http.createServer((req, res) => {
-    console.log(req.url, req.method, req.headers); 
-    //process.exit();
-    res.setHeader('Content-Type', 'text/html');
-    res.write('<html> <title> My First Page</title> <body> <h1> Hello World!</h1> </body></html>');
-    res.end();
+    const url = req.url;
+
+    if(url === '/'){
+        // res.write('<html> <head><title>Store Data</title></head> <body> <form action="/message" method="POST"> Enter the Data: <input type="text" name="" id=""> <button type="submit">Save on server</button></form></body></html>');
+        res.write('<html>');
+        res.write('<head><title> Enter Message </title></head>');
+        res.write('<body><form action="/message" method="POST"><input type="text" name="message">');
+        res.write('<button type="submit"> Save on Server</button>');
+        res.write('</form></body>');
+        res.write('</html>');
+        return res.end();
+    }
 });
 
 server.listen(3000);
